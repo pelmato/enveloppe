@@ -21,6 +21,12 @@ A simple Android app for managing budgets using cash stuffing.
 # APK généré : app/build/outputs/apk/release/app-release.apk
 ```
 
+## Signer la release
+
+```bash
+~/Android/Sdk/build-tools/34.0.0/apksigner sign --ks ~/.android/keystores/my-app-release.jks ./app/build/outputs/apk/release/app-release-unsigned.apk
+```
+
 ## Lancer l’émulateur
 
 ```bash

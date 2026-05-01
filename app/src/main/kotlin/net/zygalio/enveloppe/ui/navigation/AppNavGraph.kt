@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import net.zygalio.enveloppe.ui.screen.envelopechart.EnvelopeChartScreen
 import net.zygalio.enveloppe.ui.screen.envelopedetail.EnvelopeDetailScreen
 import net.zygalio.enveloppe.ui.screen.envelopeedit.EnvelopeEditScreen
 import net.zygalio.enveloppe.ui.screen.expenseedit.ExpenseEditScreen
@@ -14,6 +15,7 @@ import net.zygalio.enveloppe.ui.screen.home.HomeScreen
 private const val HOME = "home"
 private const val ENVELOPE_EDIT = "envelope_edit"
 private const val ENVELOPE_DETAIL = "envelope_detail"
+private const val ENVELOPE_CHART = "envelope_chart"
 private const val EXPENSE_EDIT = "expense_edit"
 
 @Composable
@@ -45,19 +47,30 @@ fun AppNavGraph() {
         composable(
             route = "$ENVELOPE_DETAIL/{envelopeId}",
             arguments = listOf(navArgument("envelopeId") { type = NavType.LongType }),
-        ) {
+        ) { backStackEntry ->
+            val envelopeId = backStackEntry.arguments?.getLong("envelopeId") ?: return@composable
             EnvelopeDetailScreen(
                 onBack = { navController.popBackStack() },
                 onEditEnvelope = { id ->
                     navController.navigate("$ENVELOPE_EDIT?envelopeId=$id")
                 },
-                onNewExpense = { envelopeId ->
-                    navController.navigate("$EXPENSE_EDIT/$envelopeId")
+                onNewExpense = { id ->
+                    navController.navigate("$EXPENSE_EDIT/$id")
                 },
-                onEditExpense = { envelopeId, expenseId ->
-                    navController.navigate("$EXPENSE_EDIT/$envelopeId?expenseId=$expenseId")
+                onEditExpense = { id, expenseId ->
+                    navController.navigate("$EXPENSE_EDIT/$id?expenseId=$expenseId")
+                },
+                onShowChart = {
+                    navController.navigate("$ENVELOPE_CHART/$envelopeId")
                 },
             )
+        }
+
+        composable(
+            route = "$ENVELOPE_CHART/{envelopeId}",
+            arguments = listOf(navArgument("envelopeId") { type = NavType.LongType }),
+        ) {
+            EnvelopeChartScreen(onBack = { navController.popBackStack() })
         }
 
         composable(

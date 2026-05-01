@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -36,7 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.zygalio.enveloppe.domain.model.Expense
 import net.zygalio.enveloppe.ui.component.BudgetProgressBar
-import net.zygalio.enveloppe.ui.component.PieChart
 import net.zygalio.enveloppe.util.formatDate
 import net.zygalio.enveloppe.util.formatDateTime
 import net.zygalio.enveloppe.util.formatMoney
@@ -48,6 +48,7 @@ fun EnvelopeDetailScreen(
     onEditEnvelope: (Long) -> Unit,
     onNewExpense: (Long) -> Unit,
     onEditExpense: (Long, Long) -> Unit,
+    onShowChart: () -> Unit,
     viewModel: EnvelopeDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -138,12 +139,11 @@ fun EnvelopeDetailScreen(
 
             if (state.breakdown.isNotEmpty()) {
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text("Répartition par catégorie", style = MaterialTheme.typography.titleSmall)
-                            Spacer(Modifier.height(12.dp))
-                            PieChart(data = state.breakdown)
-                        }
+                    Button(
+                        onClick = onShowChart,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("Voir les dépenses par catégorie")
                     }
                 }
             }
